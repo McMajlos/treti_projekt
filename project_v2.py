@@ -9,7 +9,7 @@ parser = argparse.ArgumentParser(description="Scraping data from 2017 votes.")
 parser.add_argument(
     "url",
     type=str,
-    help="Insert URL from District - example: 'https://www.volby.cz/pls/ps2017nss/ps311?xjazyk=CZ&xkraj=7&xnumnuts=5101'",
+    help="Insert URL from District - example: 'https://www.volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=12&xnumnuts=7103'",
 )
 
 parser.add_argument(
@@ -59,12 +59,10 @@ def odkazy(url, file_name):
     for td in odkazy:
         prefix = "https://www.volby.cz/pls/ps2017nss/"
         link = td.find("a")
-        # print(f"link: {link}")
         href = link.get("href")
-        # print(f"href: {href}")
         full_url = prefix + href
         response = requests.get(full_url)
-        row = []
+        # row = []
         for i in td:
             row = []
             soup = BeautifulSoup(response.text, "lxml")
@@ -101,48 +99,7 @@ def odkazy(url, file_name):
         with open(file=file_name, mode="+a", newline="") as file:
             writer = csv.writer(file)
             writer.writerow(row)
-    # print("Done")
-    # print(row)
-    # print(href)
-    # registered(full_url)
-    # given_envelopes(full_url)
-    # valid_votes(full_url)
-    # partaj(full_url)
-    # partaj_valid_votes(full_url)
 
-    # def registered(url):
-    #     response = requests.get(url)
-    #     soup = BeautifulSoup(response.text, "lxml")
-    #     registered = soup.find("td", {"class": "cislo", "headers": "sa2"})
-    #     print(registered.get_text(strip=True))
-
-    # def given_envelopes(url):
-    #     response = requests.get(url)
-    #     soup = BeautifulSoup(response.text, "lxml")
-    #     given_envelopes = soup.find("td", {"class": "cislo", "headers": "sa3"})
-    #     print(given_envelopes.get_text(strip=True))
-
-    # def valid_votes(url):
-    #     response = requests.get(url)
-    #     soup = BeautifulSoup(response.text, "lxml")
-    #     valid_votes = soup.find("td", {"class": "cislo", "headers": "sa6"})
-    #     print(valid_votes.get_text(strip=True))
-
-    # def partaj(url):
-    #     response = requests.get(url)
-    #     soup = BeautifulSoup(response.text, "lxml")
-    #     partaj = soup.find_all("td", {"class": "overflow_name", "headers": "t1sa1 t1sb2"})
-    #     for td in partaj:
-    #         print(td.get_text(strip=True))
-
-    # def partaj_valid_votes(url):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, "lxml")
-    partaj_valid_votes = soup.find_all(
-        "td", {"class": "cislo", "headers": "t1sa2 t1sb3"}
-    )
-    for td in partaj_valid_votes:
-        print(td.get_text(strip=True))
 
 
 print("Starting now")
